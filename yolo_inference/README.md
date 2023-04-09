@@ -142,6 +142,10 @@ TAPPAS is a GStreamer based library of plug-ins. It enables using a Hailo device
 Here is the GStreamer pipeline used:
 
 ```shellscript
+#!/bin/sh
+
+trap './turn_led_off' INT
+
 gst-launch-1.0 v4l2src device=/dev/video0 name=src_0 ! \
 videoflip video-direction=horiz ! \
 queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
@@ -164,6 +168,10 @@ queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
 fpsdisplaysink video-sink=ximagesink text-overlay=false name=hailo_display sync=false
 ```
 Let's explain this pipeline section by section:
+```shellscript
+trap './turn_led_off' INT
+```
+This trap system call activates when closing the program with CTRL-C and runs the *turn_led_off* script which turns off the LED.
 ```shellscript
 gst-launch-1.0 v4l2src device=/dev/video0 name=src_0 !
 ```
