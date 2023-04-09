@@ -1,7 +1,5 @@
 # Yolov5 inference - detect labels and set GPIO
 To add a network in **Tappas** that is not already supported, I needed to implement a new postprocess. Thanks to the *hailofilter* element, there is only need to provide the .so (compiled shared object bianry) that applies the filter.
-<br>
-<br>
 
 ## **Downloading the libraries**
 To compile the postprocess, we will need to download two libraries: *rapidjson* and *pigpio*.
@@ -36,8 +34,6 @@ function prepare_docker_args_ubuntu() {
         ... # remaining arguments
 }
 ```
-<br>
-<br>
 
 ## **Preparing the header file**
 The *postprocesses* folder contains the necessary files to write the .so file.
@@ -65,8 +61,6 @@ __END_DECLS
 *params_void_ptr* is used to store information on the inference of the yolo model.
 
 *yolo_postprocess.cpp* and *yolo_postprocess.hpp* provide **classes** and **functions** to run inference with the yolov5 model. They can be found in the *detection* folder. These files need the ***rapidjson*** library to function, since they need to work with a file named *yolov5.json* which holds the data for the yolo tensors.
-<br>
-<br>
 
 ## **Preparing the cpp file**
 Then I proceeded to write a .cpp file.
@@ -106,8 +100,6 @@ void my_function(HailoROIPtr roi, void *params_void_ptr)
 The code to draw the bounding boxes has been taken from the *yolov5()* function in *yolo_postprocess.cpp*. It has been written in this custom function to make use of the *HailoDetection* objects (detections).
 
 To make use of the GPIO, I used the ***pigpio*** library. 
-<br>
-<br>
 
 ## Building meson file
 Next I have added the postprocess to the meson project so that it compiles.
@@ -134,8 +126,6 @@ my_post_lib = shared_library('yolo_teddybear',
 )
 ```
 In short, this code is **providing paths** to cpp compilers, linked libraries, included directories, and dependencies. The _link_args : ['-lpigpio', '-lrt', '-lpthread']_ line has been added to link libraries to control the RaspberryPi GPIO.
-<br>
-<br>
 
 ## Compiling the .so
 Now it's time to compile the postprocess. To do that the command to run is:
@@ -146,8 +136,6 @@ After the compilation, the .so file should appear as
 ```shell
 $TAPPAS_WORKSPACE/apps/gstreamer/libs/post_processes/libyolo_teddybear.so
 ```
-<br>
-<br>
 
 ## Running the inference
 TAPPAS is a GStreamer based library of plug-ins. It enables using a Hailo devices within gstreamer pipelines to create inteliggent video processing applications. GStreamer’s development framework makes it possible to write any type of **streaming multimedia application**. The framework is based on plugins that will provide various codecs and other functionality and that can be linked and arranged in a pipeline, which defines the flow of the data.
