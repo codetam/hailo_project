@@ -1,0 +1,6 @@
+2023-04-10 16:28:28,775 - INFO - algorithm_base.py:90 - Starting Stats Collector
+2023-04-10 16:28:31,373 - INFO - algorithm_base.py:99 - Stats Collector is done (completion time is 00:00:02.60)
+2023-04-10 16:28:31,693 - INFO - conv_stripped_op.py:327 - No shifts available for layer mnist/fc1/dense_op, using max shift instead. delta=1.2123495673798823
+2023-04-10 16:28:31,919 - INFO - algorithm_base.py:86 - Bias Correction skipped
+2023-04-10 16:28:31,920 - INFO - algorithm_base.py:86 - Adaround skipped
+2023-04-10 16:28:31,921 - INFO - algorithm_base.py:86 - Fine Tune skipped
