@@ -138,7 +138,7 @@ $TAPPAS_WORKSPACE/apps/gstreamer/libs/post_processes/libyolo_teddybear.so
 ```
 
 ## Running the inference
-TAPPAS is a GStreamer based library of plug-ins. It enables using a Hailo devices within gstreamer pipelines to create inteliggent video processing applications. GStreamer’s development framework makes it possible to write any type of **streaming multimedia application**. The framework is based on plugins that will provide various codecs and other functionality and that can be linked and arranged in a pipeline, which defines the flow of the data.
+TAPPAS is a GStreamer based library of plug-ins. It enables using a Hailo devices within gstreamer pipelines to create intelligent video processing applications. GStreamer’s development framework makes it possible to write any type of **streaming multimedia application**. The framework is based on plugins that will provide various codecs and other functionality and that can be linked and arranged in a pipeline, which defines the flow of the data.
 Here is the GStreamer pipeline used:
 
 ```shellscript
