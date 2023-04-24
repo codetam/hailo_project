@@ -20,6 +20,10 @@ class VideoPlayer:
         self._canvas = canvas
         self._setup_pipeline()
     
+    def _setup_pipeline(self):
+        # The element with the set_window_handle function will be stored here
+        self._video_overlay = None
+        
         self._pipeline = Gst.parse_launch(
         "rtspsrc location=rtsp://192.168.1.13:8554/cam name=webcam_source ! \
         rtph264depay ! h264parse ! avdec_h264 max_threads=2 ! \

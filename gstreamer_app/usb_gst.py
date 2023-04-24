@@ -9,6 +9,8 @@ from gi.repository import Gtk, Gst, GstVideo, GdkX11, GLib
 
 Gst.init(None)
 
+flag = True     # flag required to stop second thread
+
 def get_window_handle(widget):
     return widget.get_window().get_xid()
 
@@ -22,16 +24,26 @@ class VideoPlayer:
         # The element with the set_window_handle function will be stored here
         self._video_overlay = None
         
-        self._pipeline = Gst.parse_launch("filesrc location=/local/workspace/tappas/apps/gstreamer/raspberrypi/detection/resources/detection.mp4 name=webcam_source ! \
-        qtdemux ! h264parse ! avdec_h264 max_threads=2 ! queue max-size-buffers=5 max-size-bytes=0 max-size-time=0 ! videoscale n-threads=2 ! \
-        queue max-size-buffers=5 max-size-bytes=0 max-size-time=0 ! videoconvert n-threads=3 ! queue max-size-buffers=5 max-size-bytes=0 max-size-time=0 ! \
+        self._pipeline = Gst.parse_launch("v4l2src device=/dev/video0 name=webcam_source ! \
+        videoflip video-direction=horiz ! \
+        queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
+        videoscale qos=false n-threads=2 ! \
+        video/x-raw, pixel-aspect-ratio=1/1 ! \
+        queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
+        videoconvert n-threads=2 qos=false ! \
+        queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
         hailonet hef-path=/local/workspace/tappas/apps/gstreamer/general/detection/resources/yolov5m_wo_spp_60p.hef batch-size=1 ! \
-        queue max-size-buffers=5 max-size-bytes=0 max-size-time=0 ! \
-        hailofilter function-name=my_function \
-        config-path=/local/workspace/tappas/apps/gstreamer/general/detection/resources/configs/yolov5.json \
-        so-path=/local/workspace/tappas/apps/gstreamer/libs/post_processes/libyolo_print_to_file.so qos=false ! queue max-size-buffers=5 max-size-bytes=0 max-size-time=0 ! \
-        hailooverlay ! queue max-size-buffers=5 max-size-bytes=0 max-size-time=0 ! videoconvert n-threads=3 ! \
-        fpsdisplaysink video-sink=ximagesink name=hailo_display sync=false text-overlay=false")
+        queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
+        hailofilter \
+        function-name=my_function \
+        so-path=/local/workspace/tappas/apps/gstreamer/libs/post_processes/libyolo_print_to_file.so \
+        config-path=/local/workspace/tappas/apps/gstreamer/general/detection/resources/configs/yolov5.json qos=false ! \
+        queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
+        hailooverlay qos=false ! \
+        queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
+        videoconvert n-threads=2 qos=false ! \
+        queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
+        fpsdisplaysink video-sink=ximagesink text-overlay=false name=hailo_display sync=false")
         
         # getting the source of the pipeline so it can be stopped
         self.source = self._pipeline.get_by_name('webcam_source')
@@ -60,7 +72,6 @@ class VideoPlayer:
         self._pipeline.set_state(Gst.State.NULL)
     
     def setup_buttons(self, builder):
-
         pause_button = builder.get_object("pause")
         pause_button.connect("clicked", self.on_pause)
         
@@ -105,7 +116,7 @@ def read_from_file(text_view):
     text_mark_end = text_buffer.create_mark("", text_buffer.get_end_iter(), False)
     numbytes = 0
     path = "/local/workspace/tappas/yolo_contents.txt"
-    while True:
+    while flag:
         if os.path.isfile(path):
             file = open(path, "r")
             file.seek(numbytes)
@@ -130,7 +141,5 @@ if __name__ =="__main__":
     t2.start()
     # wait until thread 1 is completely executed
     t1.join()
+    flag = False # flag makes second thread end
     t2.join()
-    # wait until thread 2 is completely executed
-    print("Done!")
-
