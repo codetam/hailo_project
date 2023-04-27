@@ -22,3 +22,5 @@ https://discourse.gnome.org/t/reliable-way-to-pause-play-a-pipeline-with-webcam-
 https://stackoverflow.com/questions/70517084/how-to-change-a-videooverlays-window-handle-after-it-has-already-been-set
 
 https://python-gtk-3-tutorial.readthedocs.io/en/latest/textview.html
+
+https://pygobject.readthedocs.io/en/latest/guide/threading.html (Threading)
