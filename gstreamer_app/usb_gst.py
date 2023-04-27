@@ -111,31 +111,30 @@ def run_stream(builder):
     Gtk.main()
     player.stop_stream()
 
-def read_from_file(text_view):
-    text_buffer = text_view.get_buffer()
+def insert_text(line, text_view, text_buffer):
+    text_buffer.insert_at_cursor(line)
     text_mark_end = text_buffer.create_mark("", text_buffer.get_end_iter(), False)
-    numbytes = 0
+    text_view.scroll_to_mark(text_mark_end, 0, False, 0, 0)
+    
+def read_from_file(text_view, text_buffer):
     path = "/local/workspace/tappas/yolo_contents.txt"
-    while flag:
-        if os.path.isfile(path):
-            file = open(path, "r")
-            file.seek(numbytes)
+    file = open(path, "r")
+    if os.path.isfile(path):
+        while flag:
             line = file.readline()
             if line != "":
-                text_buffer.insert(text_buffer.get_end_iter(), line)
-                text_view.scroll_to_mark(text_mark_end, 0, False, 0, 0)
-            numbytes = file.tell()
-            file.close()
-
+                GLib.idle_add(insert_text, line, text_view, text_buffer)
+    file.close()
 
 if __name__ =="__main__":
     builder = Gtk.Builder()
     builder.add_from_file("gui1.glade")
     
     text_view = builder.get_object("text_view")
+    text_buffer = text_view.get_buffer()
     # creating thread
     t1 = threading.Thread(target=run_stream, args=[builder])
-    t2 = threading.Thread(target=read_from_file, args=[text_view])
+    t2 = threading.Thread(target=read_from_file, args=[text_view, text_buffer])
     # starting thread 1
     t1.start()
     t2.start()
