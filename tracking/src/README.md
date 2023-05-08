@@ -34,3 +34,7 @@ SORT performs very well in terms of tracking precision and accuracy. But SORT re
 Mahalanobis Distance
 
 https://www.machinelearningplus.com/statistics/mahalanobis-distance/
+
+## What I did
+
+    hailo@raspberrypi:/local/workspace/tappas/core/hailo$ sudo cp tracking/ libs/postprocesses/ -r
