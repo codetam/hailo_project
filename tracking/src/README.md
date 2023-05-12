@@ -38,3 +38,6 @@ https://www.machinelearningplus.com/statistics/mahalanobis-distance/
 ## What I did
 
     hailo@raspberrypi:/local/workspace/tappas/core/hailo$ sudo cp tracking/ libs/postprocesses/ -r
+
+    HAD TO UPDATE ENTIRELY HAILO_OBJECTS AND HAILO_COMMON!
+    for get_stream_id()!

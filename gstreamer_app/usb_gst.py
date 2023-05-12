@@ -1,6 +1,7 @@
 import threading
 import gi
 import os.path
+import time
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gst', '1.0')
@@ -39,6 +40,8 @@ class VideoPlayer:
         so-path=/local/workspace/tappas/apps/gstreamer/libs/post_processes/libyolo_print_to_file.so \
         config-path=/local/workspace/tappas/apps/gstreamer/general/detection/resources/configs/yolov5.json qos=false ! \
         queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
+        hailotracker name=hailo_tracker keep-past-metadata=true \
+	class-id=1 kalman-dist-thr=.7 iou-thr=.8 keep-tracked-frames=2 keep-lost-frames=50 ! \
         hailooverlay qos=false ! \
         queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
         videoconvert n-threads=2 qos=false ! \
@@ -118,13 +121,15 @@ def insert_text(line, text_view, text_buffer):
     
 def read_from_file(text_view, text_buffer):
     path = "/local/workspace/tappas/yolo_contents.txt"
-    file = open(path, "r")
+    while not os.path.isfile(path):
+        time.sleep(1)
     if os.path.isfile(path):
+        file = open(path, "r")
         while flag:
             line = file.readline()
             if line != "":
                 GLib.idle_add(insert_text, line, text_view, text_buffer)
-    file.close()
+        file.close()
 
 if __name__ =="__main__":
     builder = Gtk.Builder()
