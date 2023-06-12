@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker run --privileged --net=host --name hailo_tappas_container_v3.23.1 --ipc=host --device /dev/dri:/dev/dri --device /dev/gpiomem --device /dev/mem -v /tmp/hailo_docker.xauth:/home/hailo/.Xauthority -v /tmp/.X11-unix/:/tmp/.X11-unix/ -v /dev:/dev -v /lib/firmware:/lib/firmware --group-add 44 -e DISPLAY=:0 -e XDG_RUNTIME_DIR=/run/user/1000 -v /home/laboratoriotlc/hailo/tappas/shared_with_docker/:/local/shared_with_docker:rw -it new_tappas_image

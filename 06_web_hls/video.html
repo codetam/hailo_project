@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <title>HLS Yolov5 Stream</title>
+   <link href="https://vjs.zencdn.net/7.19.2/video-js.css" rel="stylesheet">
+   <style>
+      body {
+         background-color: #f5f5f5;
+         margin: 0;
+         padding: 0;
+         font-family: Arial, sans-serif;
+      }
+
+      header {
+         background-color: #151929;
+         padding: 20px;
+         text-align: center;
+      }
+
+      h1 {
+         margin: 0;
+         font-size: 28px;
+         color: #fff;
+      }
+
+      .video-container {
+         margin: 20px auto;
+         max-width: 640px;
+         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+         border-radius: 4px;
+         overflow: hidden;
+      }
+   </style>
+</head>
+
+<body>
+   <header>
+      <h1>HLS Yolov5 Stream</h1>
+   </header>
+
+   <div class="video-container">
+      <video id="my-video" class="video-js vjs-big-play-centered vjs-theme-sea" controls preload="auto" width="640"
+         height="640">
+         <source src="http://192.168.1.36:80/playlist.m3u8" type="application/x-mpegURL">
+      </video>
+   </div>
+
+   <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
+   <script src="https://unpkg.com/videojs-contrib-hls/dist/videojs-contrib-hls.js"></script>
+
+   <script>
+      var player = videojs('my-video');
+   </script>
+</body>
+
+</html>
