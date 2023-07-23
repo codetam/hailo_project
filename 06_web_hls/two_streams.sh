@@ -1,6 +1,6 @@
-# Multiple video streams
+#!/bin/sh
 
-gst-launch-1.0 \
+sudo gst-launch-1.0 \
 rtspsrc location=rtsp://192.168.1.38:8554/cam name=webcam_source ! \
     rtph264depay ! h264parse ! avdec_h264 max_threads=2 ! \
     queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
@@ -22,9 +22,14 @@ rtspsrc location=rtsp://192.168.1.38:8554/cam name=webcam_source ! \
 	hailooverlay qos=false ! \
     queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
     videoconvert n-threads=2 qos=false ! \
-#   videorate ! video/x-raw,framerate=5/1 ! \
     queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
-    fpsdisplaysink video-sink=ximagesink text-overlay=false name=hailo_display sync=false \
+    videorate ! video/x-raw,framerate=5/1 ! \
+    x264enc tune=zerolatency ! mpegtsmux ! \
+    queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
+    hlssink sync=false playlist-root=http://192.168.1.36:80 \
+        location=/var/www/html/segment_%05d.ts \
+        playlist-location="/var/www/html/playlist.m3u8" \
+        target-duration=1 max-files=4 \
 v4l2src device=/dev/video0 name=src_0 ! \
     videoflip video-direction=horiz ! \
     queue leaky=no max-size-buffers=30 max-size-bytes=0 max-size-time=0 ! \
