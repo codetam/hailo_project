@@ -1,7 +1,7 @@
 #include "yolo_print_to_file.hpp"
 
 using namespace std;
-char Yolov5::prev_date[30] = "Initialization text";
+char Yolov5::prev_date[30];
 
 // Get the output layers from the hailo frame.
 void my_function(HailoROIPtr roi, void *params_void_ptr)
