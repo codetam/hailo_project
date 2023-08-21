@@ -1,8 +1,8 @@
 ## Tracking
 
-To be able to retreive the output from the hailotracker element, the hailooverlay element must be modified. By adding these modifications, every time the hailotracker is run, new information will be printed to the terminal every time a new detection is found. 
+To be able to retreive the output from the hailotracker element, a new hailofilter element must be added after the hailotracker. By doing it this way, every new detection will have a tracking id in its inner objects. 
 
-## Modifications
+## OLD Modifications
 
 A new file must be added:
 ~~~bash

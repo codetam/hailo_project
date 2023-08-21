@@ -1,7 +1,0 @@
-strict digraph "" {
-	input_layer1 -> "fc1 +Relu"	[label="[-1, 784]"];
-	"fc1 +Relu" -> "fc2 +Relu"	[label="[-1, 512]"];
-	"fc2 +Relu" -> fc3	[label="[-1, 128]"];
-	fc3 -> softmax1	[label="[-1, 10]"];
-	softmax1 -> output_layer1	[label="[-1, 10]"];
-}
